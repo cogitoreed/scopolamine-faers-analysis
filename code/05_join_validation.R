@@ -17,8 +17,8 @@
 ###############################################################################
 
 suppressMessages(library(data.table))
-OUT <- "/Users/xiaocaixu/WorkBuddy/学位自救计划/FAERS分析/output_v2"
-OUT_V1 <- "/Users/xiaocaixu/WorkBuddy/学位自救计划/FAERS分析/output"  ## Canada 表仍在 v1（04 脚本未重跑）
+OUT <- "output_v2"   # run from the project root
+OUT_V1 <- "output"   ## Canada-side tables deposited under output/
 
 faers <- fread(file.path(OUT, "03_东莨菪碱_阳性信号.csv"))
 cv    <- fread(file.path(OUT_V1, "11_canada_东莨菪碱PT计数.csv"))
