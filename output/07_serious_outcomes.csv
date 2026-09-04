@@ -1,0 +1,6 @@
+drug_group,n_reports,n_death,n_hosp,n_disab,n_life,pct_death,pct_hosp
+promethazine,53302,5760,18928,1344,1928,10.81,35.51
+scopolamine,7883,1199,2773,189,507,15.21,35.18
+meclizine,18384,1570,5287,388,318,8.54,28.76
+dimenhydrinate,10149,761,4954,583,1234,7.5,48.81
+cinnarizine,1038,73,424,74,78,7.03,40.85

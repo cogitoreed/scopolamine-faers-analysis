@@ -1,0 +1,72 @@
+指标,取值,例数,占比
+"Reports (scopolamine, any role)",7883,7883,100
+"Age, years, median (Q1, Q3)","50 (34, 64)",5316,67.4
+Age missing,2567,2567,32.6
+Age group 18-64,3513,3513,44.6
+Age group >=65,1283,1283,16.3
+Age group <18,520,520,6.6
+"Sex, F",4241,4241,53.8
+"Sex, M",2675,2675,33.9
+"Sex, UNKNOWN/MISSING",957,957,12.1
+"Sex, NS",15,15,0.2
+"Route, Unknown/Missing",5086,5086,64.5
+"Route, Transdermal",1751,1751,22.2
+"Route, Oral",510,510,6.5
+"Route, Other",395,395,5
+"Route, Parenteral",141,141,1.8
+"Country, US",4779,4779,60.6
+"Country, GB",1583,1583,20.1
+"Country, CA",427,427,5.4
+"Country, FR",246,246,3.1
+"Country, BR",86,86,1.1
+"Country, CO",74,74,0.9
+"Country, AU",69,69,0.9
+"Country, EU",69,69,0.9
+"Country, CN",62,62,0.8
+"Country, DE",61,61,0.8
+"Reporter, CN",2841,2841,36
+"Reporter, MD",1906,1906,24.2
+"Reporter, HP",855,855,10.8
+"Reporter, OT",799,799,10.1
+"Reporter, PH",764,764,9.7
+"Reporter, NA",661,661,8.4
+"Reporter, LW",57,57,0.7
+"Reporter, RN",5,5,0.1
+"Year of onset, 1978",1,1,0
+"Year of onset, 1985",1,1,0
+"Year of onset, 1990",1,1,0
+"Year of onset, 1993",6,6,0.1
+"Year of onset, 1998",3,3,0
+"Year of onset, 2000",1,1,0
+"Year of onset, 2001",1,1,0
+"Year of onset, 2002",4,4,0.1
+"Year of onset, 2003",2,2,0
+"Year of onset, 2004",7,7,0.1
+"Year of onset, 2005",2,2,0
+"Year of onset, 2006",7,7,0.1
+"Year of onset, 2007",5,5,0.1
+"Year of onset, 2008",13,13,0.2
+"Year of onset, 2009",15,15,0.2
+"Year of onset, 2010",21,21,0.3
+"Year of onset, 2011",72,72,0.9
+"Year of onset, 2012",154,154,2
+"Year of onset, 2013",218,218,2.8
+"Year of onset, 2014",197,197,2.5
+"Year of onset, 2015",255,255,3.2
+"Year of onset, 2016",351,351,4.5
+"Year of onset, 2017",317,317,4
+"Year of onset, 2018",292,292,3.7
+"Year of onset, 2019",282,282,3.6
+"Year of onset, 2020",249,249,3.2
+"Year of onset, 2021",290,290,3.7
+"Year of onset, 2022",325,325,4.1
+"Year of onset, 2023",301,301,3.8
+"Year of onset, 2024",284,284,3.6
+"Year of onset, 2025",253,253,3.2
+"Year of onset, 2026",94,94,1.2
+Serious outcome: death,1199,1199,15.2
+Serious outcome: hospitalization,2773,2773,35.2
+Serious outcome: life-threatening,11,11,0.1
+Serious outcome: disability,189,189,2.4
+Motion sickness indication (INDI),554,554,7
+Scopolamine drug role: PS/SS/C/I records,C=4671; PS=2179; SS=1351; I=49,8250,
