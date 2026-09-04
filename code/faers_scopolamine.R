@@ -27,7 +27,7 @@
 ## 0. USER CONFIG —— 只需要改这一段
 ## ============================================================================
 
-WORK_DIR   <- "/Users/xiaocaixu/WorkBuddy/学位自救计划/FAERS分析"
+WORK_DIR   <- getwd()   # run R from the project root (the directory containing data/)
 DATA_DIR   <- file.path(WORK_DIR, "data")            # 存放下载的季度 zip
 EXTRACT_DIR<- file.path(WORK_DIR, "data", "extracted") # 解压目录（可删）
 OUT_DIR    <- file.path(WORK_DIR, "output_v2")
