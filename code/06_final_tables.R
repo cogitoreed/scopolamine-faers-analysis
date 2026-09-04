@@ -12,7 +12,7 @@
 ###############################################################################
 
 suppressMessages(library(data.table))
-OUT <- "/Users/xiaocaixu/WorkBuddy/学位自救计划/FAERS分析/output_v2"
+OUT <- "output_v2"   # run from the project root
 
 faers <- fread(file.path(OUT, "03_东莨菪碱_阳性信号.csv"))
 cmp   <- fread(file.path(OUT, "12_外部验证对比.csv"))
