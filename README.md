@@ -1,6 +1,6 @@
 # Route-stratified post-marketing safety analysis of scopolamine in FAERS with external validation in Canada Vigilance
 
-*(Repository: https://github.com/<你的用户名>/scopolamine-faers-analysis —— 上传后把 <你的用户名> 替换为实际值)*
+**Repository: https://github.com/cogitoreed/scopolamine-faers-analysis (v1.0.0)**
 
 Code and key output tables for:
 
@@ -73,9 +73,13 @@ output/
 
 ## How to run
 
+> **Note**: `09_label_coding.py` / `10_label_merge.py` additionally require the TRANSDERM SCŌP
+> SPL text (download from the DailyMed link above, place as `材料包_EN/label/transderm_scop_plain.txt`)
+> and the extracted PLAIN-text conversion of the SPL. All other scripts are self-contained.
+
 ```bash
 # 0) download FAERS quarters (edit quarter list inside as needed)
-bash code/01_下载数据.sh && bash code/02_并行下载.sh
+bash code/01_download_faers.sh && bash code/02_parallel_download.sh
 
 # 1) cross-quarter deduplication (writes output_v2/global_surviving_primaryids.rds)
 Rscript code/06b_global_dedup.R
