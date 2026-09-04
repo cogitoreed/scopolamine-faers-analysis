@@ -24,8 +24,8 @@
 suppressMessages(library(data.table))
 setDTthreads(0)
 
-CV_DIR <- "/Users/xiaocaixu/WorkBuddy/学位自救计划/FAERS分析/data/canada/extracted/cvponline_extract_20241130"
-OUT    <- "/Users/xiaocaixu/WorkBuddy/学位自救计划/FAERS分析/output"
+CV_DIR <- "data/canada/extracted/cvponline_extract_20241130"   # run from the project root
+OUT    <- "output"
 dir.create(OUT, showWarnings = FALSE)
 
 ## ---------------------------------------------------------------------------
