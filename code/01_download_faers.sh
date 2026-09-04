@@ -3,9 +3,9 @@
 ## FAERS / AEMS 季度数据批量下载器
 ##
 ## 用法：在终端执行
-##   cd "/Users/xiaocaixu/WorkBuddy/学位自救计划/FAERS分析"
-##   chmod +x 01_下载数据.sh
-##   ./01_下载数据.sh
+##   cd /path/to/project-root   # directory containing data/
+##   chmod +x 01_download_faers.sh
+##   ./01_download_faers.sh
 ##
 ## 说明：
 ##   * FDA 官方目前只提供 2012Q4 至 2026Q2 共 55 个季度，更早的季度返回 500
@@ -14,7 +14,7 @@
 ##   * 全量约 3.5 GB，视网速约需 20-60 分钟，建议挂在后台跑
 ##
 ## 后台运行（关掉终端也不会断）：
-##   nohup ./01_下载数据.sh > download.log 2>&1 &
+##   nohup ./01_download_faers.sh > download.log 2>&1 &
 ##   查看进度：tail -f download.log
 ###############################################################################
 
