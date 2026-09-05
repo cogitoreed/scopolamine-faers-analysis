@@ -1,6 +1,6 @@
 # Route-stratified post-marketing safety analysis of scopolamine in FAERS with external validation in Canada Vigilance
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22337762.svg)](https://doi.org/10.5281/zenodo.22337762)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22337761.svg)](https://doi.org/10.5281/zenodo.22337761)
 
 **Repository: https://github.com/cogitoreed/scopolamine-faers-analysis (v1.0.0)**
 
