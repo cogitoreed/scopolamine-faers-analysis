@@ -62,7 +62,7 @@ code/
   06_final_tables.R          # Manuscript Table 2 and two-database comparison
   07_w1prime_tables.R        # Table 1, TTO dual-fit (fitdistr + survreg), route-stratified core PTs,
                              # route × PT-category cross-table, head-to-head table, label-coding inputs
-  08_figures.R               # Figures 1–6
+  08d_full_figures.R         # Publication figures 1-9 (600 dpi, Okabe-Ito, panel letters)
   09_label_coding.py         # Structured label review coding (Yes/No/Unclear) against the DailyMed SPL
   10_label_merge.py          # Merge FAERS a/ROR into the label-comparison table
 output/
@@ -92,7 +92,7 @@ Rscript code/faers_scopolamine.R
 Rscript code/05_join_validation.R
 Rscript code/06_final_tables.R
 Rscript code/07_w1prime_tables.R
-Rscript code/08_figures.R
+Rscript code/08d_full_figures.R
 ```
 
 **Environment**: R 4.4.2 (packages: data.table, stringr, ggplot2, MASS, survival, writexl);
