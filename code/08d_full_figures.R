@@ -293,15 +293,21 @@ tto_all <- rbind(tto[, .(tto, route_std = factor("Overall", levels = grps))], tt
 fits <- lapply(grps, function(g){
   v <- tto_all[route_std==g]$tto
   f <- survival::survreg(survival::Surv(v)~1, dist="weibull")
-  b <- 1/f$scale; ls <- sqrt(f$var[1,1])
-  data.table(grp=g, alpha=exp(coef(f)), beta=b, blo=b*exp(-1.96*ls), bhi=b*exp(1.96*ls), med=median(v))
+  data.table(grp=g, mu=unname(coef(f)), sigma=f$scale,
+             V11=f$var[1,1], V12=f$var[1,2], V22=f$var[2,2], med=median(v))
 })
 fits <- rbindlist(fits)
 tt <- data.table(expand.grid(t=1:365, grp=grps))
 cdf <- fits[tt, on=.(grp), allow.cartesian=TRUE]
-cdf[, est := 1-exp(-(t/alpha)^beta)]
-cdf[, lo  := 1-exp(-(t/alpha)^blo)]
-cdf[, hi  := 1-exp(-(t/alpha)^bhi)]
+## pointwise 95% CI band via delta method on (mu, log sigma)
+cdf[, lt := log(t)]
+cdf[, y  := (lt - mu)/sigma]
+cdf[, g1 := -1/sigma]
+cdf[, g2 := -(lt - mu)/sigma]
+cdf[, se := sqrt(g1^2*V11 + g2^2*V22 + 2*g1*g2*V12)]
+cdf[, est := 1-exp(-exp(y))]
+cdf[, lo  := 1-exp(-exp(y-1.96*se))]
+cdf[, hi  := 1-exp(-exp(y+1.96*se))]
 pA <- ggplot(cdf, aes(t, est, colour=grp)) +
   geom_ribbon(aes(ymin=lo, ymax=hi, fill=grp), alpha=.12, colour=NA) +
   geom_line(linewidth=.7) +

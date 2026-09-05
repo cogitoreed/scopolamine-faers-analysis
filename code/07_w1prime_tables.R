@@ -195,7 +195,7 @@ fit_w <- function(v) {
 fit_sr <- function(v) {
   d <- data.table(tto=v)
   f <- survreg(Surv(tto) ~ 1, data=d, dist="weibull")
-  sc <- f$scale; b <- 1/sc; se_ls <- sqrt(f$var[1,1])
+  sc <- f$scale; b <- 1/sc; se_ls <- sqrt(f$var[2,2])   ## Var(Log(scale)) = Var(log shape)
   list(method="survreg", n=length(v), shape=b, shape_lcl=b*exp(-1.96*se_ls), shape_ucl=b*exp(1.96*se_ls),
        scale=sc)
 }
