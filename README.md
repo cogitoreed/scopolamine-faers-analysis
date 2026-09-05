@@ -66,7 +66,8 @@ code/
   09_label_coding.py         # Structured label review coding (Yes/No/Unclear) against the DailyMed SPL
   10_label_merge.py          # Merge FAERS a/ROR into the label-comparison table
 output/
-  Key result tables (CSV) and figures (PNG) as reported in the manuscript and supplements.
+  Key result tables (CSV), publication figures (output/figures/, 600 dpi PNG), and
+  supplementary tables as reported in the manuscript.
   Large intermediate files (full report–PT long table, .rds) are omitted; they are regenerated
   by the pipeline from the public sources above.
 ```
