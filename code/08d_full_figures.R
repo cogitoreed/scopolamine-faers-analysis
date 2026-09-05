@@ -398,24 +398,33 @@ pB <- ggplot(dm, aes(ROR, pt, colour=db)) +
 p7 <- (pA | pB) + plot_annotation(tag_levels="A")
 gsave6("fig7_extval.png", p7, h=4.6)
 
-## ================= F8 头对头 =================
+## ================= F8 头对头（三药 ROR+95%CI） =================
 hh <- fread(file.path(OUT, "26_头对头_tab_headtohead.csv"))
 h12 <- hh[!is.na(ROR_promethazine) & !is.na(ROR_dimenhydrinate)][order(-ROR_scopolamine)][1:12]
-h_l <- rbind(h12[, .(pt, ROR=ROR_scopolamine,   drug="Scopolamine")],
-             h12[, .(pt, ROR=ROR_promethazine, drug="Promethazine")],
-             h12[, .(pt, ROR=ROR_dimenhydrinate, drug="Dimenhydrinate")])
+sig02 <- fread(file.path(OUT, "02_信号检测_全部药物.csv"),
+               select=c("drug","pt","ROR_lcl","ROR_ucl"))
+setnames(sig02, c("drugkey","pt","lcl","ucl"))
+h_l <- melt(h12, id.vars="pt",
+            measure.vars=c("ROR_scopolamine","ROR_promethazine","ROR_dimenhydrinate"),
+            variable.name="drugkey", value.name="ROR")
+h_l[, drugkey := gsub("ROR_","",drugkey)]
+h_l <- merge(h_l, sig02, by=c("drugkey","pt"), all.x=TRUE)
+h_l[, drug := fifelse(drugkey=="scopolamine","Scopolamine",
+              fifelse(drugkey=="promethazine","Promethazine","Dimenhydrinate"))]
 h_l[, pt := factor(pt, levels=rev(h12$pt))]
 h_l[, drug := factor(drug, c("Promethazine","Dimenhydrinate","Scopolamine"))]
 p8 <- ggplot(h_l, aes(ROR, pt, colour=drug, shape=drug)) +
   geom_vline(xintercept=1, linetype="dashed", colour="grey45", linewidth=.35) +
-  geom_point(size=1.9, alpha=.92) +
+  geom_linerange(aes(xmin=lcl, xmax=ucl), position=position_dodge(width=.62),
+                 linewidth=.38, alpha=.9) +
+  geom_point(size=1.6, alpha=.92, position=position_dodge(width=.62)) +
   scale_x_log10(breaks=c(1,5,10,20,50)) +
   scale_colour_manual(values=c(Scopolamine="#000000", Promethazine="#E69F00", Dimenhydrinate="#009E73")) +
   scale_shape_manual(values=c(Scopolamine=16, Promethazine=1, Dimenhydrinate=2)) +
-  labs(x="ROR (log scale)", y=NULL, colour=NULL, shape=NULL) +
+  labs(x="ROR (95% CI, log scale)", y=NULL, colour=NULL, shape=NULL) +
   theme_pub + theme(legend.position="top", legend.key.height=unit(.26,"cm"),
                     panel.grid.major.y=element_blank())
-gsave6("fig8_headtohead.png", p8, w=6.4, h=5.0)
+gsave6("fig8_headtohead.png", p8, w=6.4, h=5.2)
 
 ## ================= F9 label（点图 + 簇×状态堆叠） =================
 lab <- fread("材料包_EN/tab_label_XuCai_260904.csv", encoding="UTF-8")
