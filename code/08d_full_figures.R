@@ -200,8 +200,8 @@ pB <- ggplot(d4[!is.na(ROR)], aes(ROR, pt, colour=grp)) +
   labs(x="ROR (95% CI, log scale)", y=NULL, colour=NULL) +
   theme_pub + theme(legend.position="bottom", legend.key.height=unit(.26,"cm"),
                     legend.text=element_text(size=7), panel.grid.major.y=element_blank())
-p4 <- pA + pB + plot_annotation(tag_levels="A") + plot_layout(widths=c(1,1.25))
-gsave6("fig4_route.png", p4, h=4.4)
+p4 <- pA / pB + plot_annotation(tag_levels="A") + plot_layout(heights=c(1,2.1))
+gsave6("fig4_route.png", p4, h=7.0)
 
 ## ================= 簇分类（共用） =================
 CENTRAL <- c("CONFUSIONAL STATE","HALLUCINATION","DELIRIUM","AGITATION","AMNESIA","DISORIENTATION","SOMNOLENCE","DIZZINESS","LETHARGY","SEDATION")
@@ -247,43 +247,51 @@ pC <- ggplot(cc, aes(n, reorder(cluster,n), fill=cluster)) + geom_col(width=.68)
 p3 <- (pA | pB) / pC + plot_annotation(tag_levels="A") + plot_layout(heights=c(1.15,0.55))
 gsave6("fig3_spectrum.png", p3, h=7.4)
 
-## ================= F4 途径分层（热图 + 森林） =================
+## ================= F4 途径分层（聚类发生率 + PT×途径 ROR 热图） =================
+rt_n <- c(Transdermal=1751, Oral=510, Parenteral=141)
 xw <- fread(file.path(OUT, "27_途径xPT类别交叉表.csv"))
 setnames(xw, "cat", "category")
-m <- melt(xw, id.vars="category", variable.name="route", value.name="n")
-rn <- c(Transdermal=1751, Oral=510, Parenteral=141)
-m[, pct := 100*n/rn[as.character(route)]]
-m[, category := fcase(category=="Local/application-site", "Local/product",
-                      category=="Hypersensitivity/systemic", "Hypersensitivity",
-                      category=="Other/general", "General/other",
-                      default=category)]
-m[, category := factor(category, c("Local/product","Heat-related","Hypersensitivity","Central anticholinergic","Peripheral anticholinergic","General/other"))]
-m[, route := factor(route, c("Transdermal","Oral","Parenteral"))]
-pA <- ggplot(m, aes(route, category, fill=pct)) +
-  geom_tile(colour="white", linewidth=.6) +
-  geom_text(aes(label=sprintf("%d\n(%.1f%%)", n, pct)), size=2.4, lineheight=.9) +
-  scale_fill_gradient(low="#F7FBFF", high="#08519C", name="% of route reports") +
-  labs(x=NULL, y=NULL) + theme_pub +
-  theme(axis.text.x=element_text(size=8, angle=20, hjust=1), axis.text.y=element_text(size=8),
-        legend.title=element_text(size=7.5), legend.text=element_text(size=7),
-        panel.grid=element_blank())
-rs4 <- fread(file.path(OUT, "25_途径分层_核心PT.csv"))
+ml <- melt(xw, id.vars="category", variable.name="route", value.name="n")
+ml[, route := factor(route, c("Transdermal","Oral","Parenteral"))]
+ml[, rate := 1000*n/rt_n[as.character(route)]]
+ml[, category := fcase(category=="Local/application-site","Local/product",
+                       category=="Hypersensitivity/systemic","Hypersensitivity",
+                       category=="Other/general","General/other", default=category)]
+ml[, category := factor(category, c("Local/product","Heat-related","Hypersensitivity",
+                                    "Central anticholinergic","Peripheral anticholinergic","General/other"))]
+pA <- ggplot(ml, aes(rate, category, fill=route)) +
+  geom_col(position=position_dodge(width=.72), width=.7, colour="white", linewidth=.2) +
+  geom_text(aes(label=sprintf("%.0f", rate)), position=position_dodge(width=.72),
+            hjust=-.2, size=2.2, colour="grey25") +
+  scale_x_continuous(expand=expansion(mult=c(0,.14))) +
+  scale_y_discrete(limits=rev(levels(ml$category))) +
+  scale_fill_manual(values=PAL, breaks=c("Transdermal","Oral","Parenteral")) +
+  labs(x="Events per 1,000 route-specific reports", y=NULL, fill=NULL) +
+  theme_pub + theme(legend.position="top", legend.key.height=unit(.26,"cm"),
+                    legend.title=element_text(size=7.5), legend.text=element_text(size=7))
 keep4 <- ov[order(-ROR)][1:15]$pt
+rs4b <- rs4[route %in% c("Transdermal","Oral","Parenteral")]
 d4 <- rbind(ov[pt %in% keep4, .(pt, grp="Overall", ROR, lcl, ucl)],
-            rs4[pt %in% keep4, .(pt, grp=route, ROR, lcl, ucl)])
+            rs4b[pt %in% keep4, .(pt, grp=route, ROR, lcl, ucl, signal)], fill=TRUE)
 d4[, grp := factor(grp, c("Overall","Transdermal","Oral","Parenteral"))]
 d4[, pt := factor(pt, levels=rev(keep4))]
-pB <- ggplot(d4[!is.na(ROR)], aes(ROR, pt, colour=grp)) +
-  geom_vline(xintercept=1, linetype="dashed", colour="grey45", linewidth=.35) +
-  geom_point(position=position_dodge(width=.62), size=1.3) +
-  geom_linerange(aes(xmin=lcl, xmax=ucl), position=position_dodge(width=.62), linewidth=.38) +
-  scale_x_log10(breaks=c(.5,2,10,50), labels=c("0.5","2","10","50"), expand=expansion(mult=c(.02,.08))) +
-  scale_colour_manual(values=PAL) +
-  labs(x="ROR (95% CI, log scale)", y=NULL, colour=NULL) +
-  theme_pub + theme(legend.position="bottom", legend.key.height=unit(.26,"cm"),
-                    legend.text=element_text(size=7), panel.grid.major.y=element_blank())
-p4 <- pA + pB + plot_annotation(tag_levels="A") + plot_layout(widths=c(1,1.25))
-gsave6("fig4_route.png", p4, h=4.4)
+d4[, sig := fifelse(grp=="Overall", TRUE, signal==TRUE)]
+d4[, cell := fifelse(is.na(ROR), NA_real_, fifelse(sig, ROR, NA_real_))]
+d4[, txtcol := fifelse(!is.na(cell) & cell>30, "white", "grey15")]
+pB <- ggplot(d4, aes(grp, pt, fill=cell)) +
+  geom_tile(colour="white", linewidth=.8, na.value="grey96") +
+  geom_text(aes(label=ifelse(is.na(ROR), "–", ifelse(sig, sprintf("%.1f", ROR), "n.s.")),
+                colour=txtcol), size=2.35, show.legend=FALSE) +
+  scale_colour_identity() +
+  scale_fill_gradient(low="#F7FBFF", high="#08519C", trans="log10",
+                      breaks=c(1,10,100), labels=c("1","10","100"), na.value="grey96",
+                      name="ROR (log scale)") +
+  labs(x=NULL, y=NULL) + theme_pub +
+  theme(axis.text.x=element_text(size=8.5), axis.text.y=element_text(size=7.5),
+        legend.title=element_text(size=7.5), legend.text=element_text(size=7),
+        panel.grid=element_blank())
+p4 <- pA / pB + plot_annotation(tag_levels="A") + plot_layout(heights=c(1,2.0))
+gsave6("fig4_route.png", p4, h=7.2)
 
 ## ================= F5 TTO（ECDF+CI 带 + 箱线） =================
 tto <- readRDS(file.path(OUT, "23b_tto_报告级.rds"))
@@ -340,7 +348,7 @@ pA <- ggplot(m6, aes(ov_ROR, ms_ROR)) +
   annotate("text", x=1.0, y=280, hjust=0, size=2.6,
            label=sprintf("Shared PTs: %d\nSubgroup reports: n = 554 (7.0%%)", nrow(m6))) +
   labs(x="ROR, overall (log scale)", y="ROR, motion sickness subgroup (log scale)", colour=NULL) +
-  theme_pub + theme(legend.position=c(.04,.14),
+  theme_pub + theme(legend.position=c(.98,.02), legend.justification=c(1,0),
                     legend.background=element_rect(fill="white", colour="grey85", linewidth=.2),
                     legend.key.height=unit(.26,"cm"))
 top10 <- ms[signal==TRUE][order(-a)][1:10]
@@ -375,9 +383,9 @@ pA <- ggplot(evs, aes(faers_ror, canada_ror, colour=verdict)) +
                       labels=c("Replicated","Direction-consistent","Discordant")) +
   scale_size_continuous(range=c(1.2,4.2), guide="none") +
   annotate("text", x=min(evs$faers_ror)*1.1, y=max(evs$canada_ror)*.75, hjust=0, size=2.6,
-           label=sprintf("Directional agreement:\n%d/%d (%.0f%%)", round(agree*evs[,.N]), evs[,.N], 100*agree)) +
+           label=sprintf("Overall agreement:\n%d/%d (%.0f%%)", round(agree*evs[,.N]), evs[,.N], 100*agree)) +
   labs(x="FAERS ROR (log scale)", y="Canada Vigilance ROR (log scale)", colour=NULL) +
-  theme_pub + theme(legend.position="bottom", legend.key.height=unit(.26,"cm"), legend.text=element_text(size=7))
+  theme_pub + theme(legend.position="top", legend.key.height=unit(.26,"cm"), legend.text=element_text(size=7))
 pB <- ggplot(dm, aes(ROR, pt, colour=db)) +
   geom_line(aes(group=pt), colour="grey78", linewidth=.8) +
   geom_point(aes(shape=db), size=2.1, alpha=.92) +
